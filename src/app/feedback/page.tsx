@@ -12,9 +12,11 @@ export default async function FeedbackPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      <Header />
-      {!user && <div className="m-10 h-dvh">Войдите, чтобы оставить отзыв</div>}
-      {user && <FeedbackForm user={user} services={services} />}
+      <div className="h-dvh">
+        <Header />
+        {!user && <div>Войдите, чтобы оставить отзыв</div>}
+        {user && <FeedbackForm user={user} services={services} />}
+      </div>
       <Footer />
     </div>
   )
