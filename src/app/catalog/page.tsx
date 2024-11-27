@@ -1,4 +1,3 @@
-import { Shield } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -52,7 +51,7 @@ export default async function ServicesPage({
                   </CardHeader>
                   <CardFooter>
                     <Button asChild className="w-full">
-                      <Link href={`/services/${service.slug}`}>Подробнее</Link>
+                      <Link href={`/catalog/${service.slug}`}>Подробнее</Link>
                     </Button>
                   </CardFooter>
                 </Card>

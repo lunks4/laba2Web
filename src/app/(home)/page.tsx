@@ -1,19 +1,14 @@
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+
 import { db } from '@/server/db'
 import { services as servicesTable } from '@/server/db/schema'
 import { Shield, Home, Car, Plane, Heart, Phone, Mail, MapPin } from 'lucide-react'
 import Link from 'next/link'
-import IconFromDb from './IconFromDb'
+import IconFromDb from '../IconFromDb'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
+
+import CarouselSection from './news-section'
 
 export default async function LandingPage() {
   const services = await db.select().from(servicesTable)
@@ -39,29 +34,7 @@ export default async function LandingPage() {
               </div>
             </div>
           </section>
-          <section id="services" className="flex justify-center w-full py-12 md:py-24 lg:py-32">
-            <div className="container px-4 md:px-6">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">
-                Наши услуги
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {services.map((service, index) => (
-                  <Card key={index} className="flex flex-col justify-between">
-                    <CardHeader>
-                      <IconFromDb icon={service.icon} />
-                      <CardTitle>{service.title}</CardTitle>
-                      <CardDescription>{service.description}</CardDescription>
-                    </CardHeader>
-                    <CardFooter>
-                      <Button asChild className="w-full">
-                        <Link href={`/catalog/${service.slug}`}>Подробнее</Link>
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </section>
+
           <section
             id="about"
             className="flex justify-center w-full py-12 md:py-24 lg:py-32 bg-muted"
@@ -111,6 +84,8 @@ export default async function LandingPage() {
               </div>
             </div>
           </section>
+
+          <CarouselSection />
         </div>
       </main>
       <Footer />

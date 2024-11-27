@@ -20,21 +20,20 @@ export const services = sqliteTable('services', {
   price: integer().notNull(),
   icon: text({ enum: icons }).notNull(),
   slug: text().unique().notNull(),
-  discount: integer(),
 })
 
 export type Service = typeof services.$inferSelect
 export type NewService = typeof services.$inferInsert
 
-export const orders = sqliteTable('orders', {
-  id: integer().primaryKey(),
-  userId: integer().notNull().references(() => users.id),
-  serviceId: integer().notNull().references(() => services.id),
-  quantity: integer().notNull(),
-})
+// export const orders = sqliteTable('orders', {
+//   id: integer().primaryKey(),
+//   userId: integer().notNull().references(() => users.id),
+//   serviceId: integer().notNull().references(() => services.id),
+//   quantity: integer().notNull(),
+// })
 
-export type Order = typeof orders.$inferSelect
-export type NewOrder = typeof orders.$inferInsert
+// export type Order = typeof orders.$inferSelect
+// export type NewOrder = typeof orders.$inferInsert
 
 export const feedbacks = sqliteTable('feedback', {
   id: integer().primaryKey(),

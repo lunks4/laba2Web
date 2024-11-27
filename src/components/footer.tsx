@@ -10,11 +10,12 @@ export default function Footer() {
         <Link className="text-xs hover:underline underline-offset-4" href="/feedback">
           Обратная связь
         </Link>
-        <Link className="text-xs hover:underline underline-offset-4" href="#">
-          Политика конфиденциальности
-        </Link>
-        <Link className="text-xs hover:underline underline-offset-4" href="#">
-          Условия использования
+        <Link
+          className="text-xs hover:underline underline-offset-4"
+          href="/Пользовательское соглашение.pdf"
+          target="_blank"
+        >
+          Пользовательское соглашение
         </Link>
       </nav>
     </footer>
