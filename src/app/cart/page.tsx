@@ -11,7 +11,7 @@ export default async function CartPage() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <Header />
-      <Main />
+      <Main user={user} />
       <Footer />
     </div>
   )

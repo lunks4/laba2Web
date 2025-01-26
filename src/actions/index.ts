@@ -1,13 +1,29 @@
 'use server'
 
+import { CartItem } from '@/app/providers/cart-provider'
 import { useUser } from '@/hooks/use-user'
 import { db } from '@/server/db'
-import { services as servicesTable, users as usersTable, feedbacks as feedbackTable } from '@/server/db/schema'
+import { services as servicesTable, users as usersTable, feedbacks as feedbackTable, orders as ordersTable } from '@/server/db/schema'
 import { hash, verify } from 'argon2'
-import { eq, like, or, sql } from 'drizzle-orm'
-import { revalidatePath } from 'next/cache'
+import { eq } from 'drizzle-orm'
 import { cookies } from 'next/headers'
 import { z } from 'zod'
+
+export const getCategories = async (params?: { search?: string }) => {
+  const categories = await db.query.categories.findMany({ with: { services: true } })
+
+  if (!params?.search) return categories
+  const { search } = params
+
+  const categoriesWithSearchedTitle = categories.map(c => c.title.toLowerCase().includes(search.toLowerCase()))
+  const categoriesWithFilteredServices = categories.map((c, index) => {
+    if (categoriesWithSearchedTitle[index]) return c
+    const filteredServices = c.services.filter(s => s.title.toLowerCase().includes(search.toLowerCase()))
+    return { ...c, services: filteredServices }
+  })
+
+  return categoriesWithFilteredServices.filter((category, index) => categoriesWithSearchedTitle[index] || category.services.length > 0)
+}
 
 export const getServices = async (params?: { search?: string }) => {
   const services = await db.select().from(servicesTable)
@@ -59,8 +75,11 @@ export const login = async (loginData: typeof loginSchema._type) => {
 }
 
 const registerSchema = z.object({
-  name: z.string().min(2),
+  firstname: z.string().min(2),
+  lastname: z.string().min(2),
+  middlename: z.string(),
   email: z.string().email(),
+  phone: z.string().refine(phone => phone.startsWith('+') && phone.length === 12, { message: 'Неверный телефон' }),
   password: z.string().min(4),
   confirmPassword: z.string().min(4),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -84,7 +103,10 @@ export const register = async (registerData: typeof registerSchema._type) => {
 
   const passwordHash = await hash(res.data.password)
   const user = (await db.insert(usersTable).values({
-    name: res.data.name,
+    firstname: res.data.firstname,
+    lastname: res.data.lastname,
+    middlename: res.data.middlename,
+    phone: res.data.phone,
     email: res.data.email,
     passwordHash,
   }).returning())[0]!
@@ -139,4 +161,14 @@ export const createFeedback = async (feedbackData: typeof createFeedbackSchema._
     error: false,
     feedback,
   }
+}
+
+export const createOrder = async (orderData: { cartItems: CartItem[], userId: number }) => {
+  const values = orderData.cartItems.map(item => ({
+    userId: orderData.userId,
+    serviceId: item.service.id,
+    quantity: item.quantity,
+  }))
+
+  await db.insert(ordersTable).values(values)
 }
