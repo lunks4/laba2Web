@@ -7,12 +7,6 @@ npm db:seed
 npm run dev
 ```
 
+![screen1](https://github.com/user-attachments/assets/170192fb-fdd6-477b-bad6-0932fa6cb643)
 
-ФИО
-номер т
-
-ссылка на польз согл в окне регистрации
-
-картинки в бд
-
-в категории минимум по 2 карточки товара с картинками
+![screen2](https://github.com/user-attachments/assets/5d959c8a-cadf-451b-92a9-96a6bab0f77e)
