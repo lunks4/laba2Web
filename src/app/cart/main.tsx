@@ -4,13 +4,16 @@ import { CartItem } from './cart-item'
 import { CartSummary } from './cart-summary'
 import { useCart } from '@/hooks/use-cart'
 import { useToast } from '@/hooks/use-toast'
+import { createOrder } from '@/actions'
+import { User } from '@/server/db/schema'
 
-export default function Main() {
+export default function Main({ user }: { user: { id: number } }) {
   const { items, load, clear, updateItem } = useCart()
   const { toast } = useToast()
   useEffect(load, [])
 
   const onPurchase = async () => {
+    await createOrder({ cartItems: items, userId: user.id })
     clear()
     toast({
       title: 'Заказ оформлен',

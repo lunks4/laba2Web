@@ -95,12 +95,6 @@ export default function LoginPage() {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <Link
-            href="/forgot-password"
-            className="text-sm text-center text-blue-500 hover:underline"
-          >
-            Забыли пароль?
-          </Link>
           <div className="text-sm text-center">
             Нет аккаунта?{' '}
             <Link href="/register" className="text-blue-500 hover:underline">

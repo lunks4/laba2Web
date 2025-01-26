@@ -5,8 +5,10 @@ import { services } from '@/server/db/schema'
 import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import Card from './card'
+import { useUser } from '@/hooks/use-user'
 
 export default async function ServicePage({ params: { slug } }: { params: { slug: string } }) {
+  const { user } = await useUser()
   const service = await db.query.services.findFirst({ where: eq(services.slug, slug) })
   if (!service) redirect('/catalog')
 
@@ -16,7 +18,7 @@ export default async function ServicePage({ params: { slug } }: { params: { slug
 
       <main className="flex-grow">
         <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-          <Card service={service} />
+          <Card service={service} loggedIn={!!user} />
         </div>
       </main>
 

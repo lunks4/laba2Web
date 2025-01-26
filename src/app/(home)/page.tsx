@@ -1,17 +1,17 @@
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 
 import { db } from '@/server/db'
-import { services as servicesTable } from '@/server/db/schema'
-import { Shield, Home, Car, Plane, Heart, Phone, Mail, MapPin } from 'lucide-react'
-import Link from 'next/link'
-import IconFromDb from '../IconFromDb'
+import { services as servicesTable, banners as bannersTable } from '@/server/db/schema'
+import { Phone, Mail, MapPin } from 'lucide-react'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 
-import CarouselSection from './news-section'
+import CarouselSection from './carousel-section'
+import Link from 'next/link'
 
 export default async function LandingPage() {
-  const services = await db.select().from(servicesTable)
+  // const services = await db.select().from(servicesTable)
+  const banners = await db.select().from(bannersTable)
 
   return (
     <div className="flex flex-col min-h-screen justify-center">
@@ -28,9 +28,9 @@ export default async function LandingPage() {
                   Мы предоставляем широкий спектр страховых услуг для вашего спокойствия и
                   уверенности в завтрашнем дне.
                 </p>
-                <Button className="bg-white text-primary hover:bg-primary-foreground">
+                <Link href="/#contact" className={buttonVariants({ variant: 'secondary' })}>
                   Получить консультацию
-                </Button>
+                </Link>
               </div>
             </div>
           </section>
@@ -85,7 +85,7 @@ export default async function LandingPage() {
             </div>
           </section>
 
-          <CarouselSection />
+          <CarouselSection banners={banners} />
         </div>
       </main>
       <Footer />

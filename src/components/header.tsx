@@ -31,7 +31,9 @@ export default async function Header() {
         )}
         {user && (
           <Popover>
-            <PopoverTrigger>{user.name}</PopoverTrigger>
+            <PopoverTrigger>
+              {user.lastname} {user.firstname}
+            </PopoverTrigger>
             <PopoverContent className="w-fit">
               <Button onClick={logout} variant={'destructive'}>
                 Выйти
