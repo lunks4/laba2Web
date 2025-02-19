@@ -20,13 +20,20 @@ import { redirect } from 'next/navigation'
 
 export default function RegisterPage() {
   const { toast } = useToast()
-  const [name, setName] = useState('')
+  const [firstname, setFirstname] = useState('')
+  const [lastname, setLastname] = useState('')
+  const [middlename, setMiddlename] = useState('')
+  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
-  const [nameError, setNameError] = useState('')
+
+  const [firstnameError, setFirstameError] = useState('')
   const [emailError, setEmailError] = useState('')
+  const [lastnameError, setLastnameError] = useState('')
+  const [middlenameError, setMiddlenameError] = useState('')
+  const [phoneError, setPhoneError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
 
@@ -34,15 +41,31 @@ export default function RegisterPage() {
     e.preventDefault()
     setError('')
     setEmailError('')
+    setFirstameError('')
+    setLastnameError('')
+    setMiddlenameError('')
+    setPhoneError('')
     setPasswordError('')
     setConfirmPasswordError('')
-    const res = await register({ name, email, password, confirmPassword })
+    const res = await register({
+      firstname,
+      lastname,
+      middlename,
+      phone,
+      email,
+      password,
+      confirmPassword,
+    })
     if (res?.error) {
       if (res.message) setError(res.message)
-      if ('name' in res) setNameError(res.name?.toString() ?? '')
+      if ('name' in res) setFirstameError(res.name?.toString() ?? '')
       if ('email' in res) setEmailError(res.email?.toString() ?? '')
       if ('password' in res) setPasswordError(res.password?.toString() ?? '')
       if ('confirmPassword' in res) setConfirmPasswordError(res.confirmPassword?.toString() ?? '')
+      if ('firstname' in res) setFirstameError(res.firstname?.toString() ?? '')
+      if ('lastname' in res) setLastnameError(res.lastname?.toString() ?? '')
+      if ('middlename' in res) setMiddlenameError(res.middlename?.toString() ?? '')
+      if ('phone' in res) setPhoneError(res.phone?.toString() ?? '')
     } else {
       toast({
         title: 'Регистрация выполнена',
@@ -71,16 +94,38 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Имя</Label>
+                <Label htmlFor="firstname">Имя</Label>
                 <Input
-                  id="name"
+                  id="firstname"
                   type="text"
-                  placeholder="Пупкин Василий"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
+                  value={firstname}
+                  onChange={e => setFirstname(e.target.value)}
                   required
                 />
-                {nameError && <p className="text-sm text-red-500">{nameError}</p>}
+                {firstnameError && <p className="text-sm text-red-500">{firstnameError}</p>}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="lastname">Фамилия</Label>
+                <Input
+                  id="lastname"
+                  type="text"
+                  value={lastname}
+                  onChange={e => setLastname(e.target.value)}
+                />
+                {lastnameError && <p className="text-sm text-red-500">{lastnameError}</p>}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="middlename">Отчество (если есть)</Label>
+                <Input
+                  id="middlename"
+                  type="text"
+                  value={middlename}
+                  onChange={e => setMiddlename(e.target.value)}
+                  required
+                />
+                {middlenameError && <p className="text-sm text-red-500">{middlenameError}</p>}
               </div>
 
               <div className="space-y-2">
@@ -88,12 +133,24 @@ export default function RegisterPage() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="mail@example.com"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
                 />
                 {emailError && <p className="text-sm text-red-500">{emailError}</p>}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">Телефон</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  placeholder="+79991234567"
+                  onChange={e => setPhone(e.target.value)}
+                  required
+                />
+                {phoneError && <p className="text-sm text-red-500">{phoneError}</p>}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Пароль</Label>
@@ -122,6 +179,16 @@ export default function RegisterPage() {
               </div>
             </div>
             {error && <p className="text-sm text-red-500">{error}</p>}
+
+            <p className="mt-6">
+              Регистрируясь, вы подтверждаете, что согласны с{' '}
+              <Link
+                className="text-blue-500 hover:underline"
+                href="/Пользовательское соглашение.pdf"
+              >
+                пользовательским соглашением
+              </Link>
+            </p>
             <Button className="w-full mt-4" type="submit">
               Зарегистрироваться
             </Button>
